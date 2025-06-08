@@ -7,9 +7,12 @@
 	<title>@yield('pageTitle')</title>
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<!-- Site favicon -->
-	{{-- <link rel="apple-touch-icon" sizes="180x180" href="/back/vendors/images/apple-touch-icon.png" /> --}}
-	{{-- <link rel="icon" type="image/png" sizes="32x32" href="/back/vendors/images/favicon-32x32.png" /> --}}
-	<link rel="icon" type="image/png" sizes="16x16" href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : ''}}" />
+	{{--
+	<link rel="apple-touch-icon" sizes="180x180" href="/back/vendors/images/apple-touch-icon.png" /> --}}
+	{{--
+	<link rel="icon" type="image/png" sizes="32x32" href="/back/vendors/images/favicon-32x32.png" /> --}}
+	<link rel="icon" type="image/png" sizes="16x16"
+		href="/images/site/{{ isset(settings()->site_favicon) ? settings()->site_favicon : ''}}" />
 
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -25,7 +28,7 @@
 	<link rel="stylesheet" href="/extra-assets/jquery-ui-1.14.1/jquery-ui.structure.min.css">
 	<link rel="stylesheet" href="/extra-assets/jquery-ui-1.14.1/jquery-ui.theme.min.css">
 	<link rel="stylesheet" type="text/css" href="/back/vendors/styles/style.css" />
-	
+
 </head>
 @kropifyStyles
 @stack('stylesheets')
@@ -94,8 +97,7 @@
 										<img src="/back/vendors/images/img.jpg" alt="" />
 										<h3>John Doe</h3>
 										<p>
-											Lorem ipsum dolor sit amet, consectetur adipisicing
-											elit, sed...
+											{{ auth()->user()->type }}
 										</p>
 									</a>
 								</li>
@@ -165,6 +167,7 @@
 	<div class="right-sidebar">
 		<div class="sidebar-title">
 			<h3 class="weight-600 font-16 text-blue">
+				
 				Layout Settings
 				<span class="btn-block font-weight-400 font-12">User Interface Settings</span>
 			</h3>
@@ -256,8 +259,10 @@
 	<div class="left-side-bar">
 		<div class="brand-logo">
 			<a href="index.html">
-				<img src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}" alt="" class="dark-logo site_logo" />
-				<img src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}" alt="" class="light-logo site-logo" />
+				<img src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}" alt=""
+					class="dark-logo site_logo" />
+				<img src="/images/site/{{ isset(settings()->site_logo) ? settings()->site_logo : '' }}" alt=""
+					class="light-logo site-logo" />
 			</a>
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
 				<i class="ion-close-round"></i>
@@ -271,21 +276,23 @@
 							<span class="micon bi bi-house"></span><span class="mtext"> Home </span>
 						</a>
 					</li>
+					@if (auth()->user()->type == 'superAdmin')
 					<li>
 						<a href="{{ route('admin.categories') }}" class="dropdown-toggle no-arrow">
 							<span class="micon bi bi-card-list"></span><span class="mtext"> Categories </span>
 						</a>
 					</li>
+					@endif
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
+						<a href="javascript:;" class="dropdown-toggle {{ Route::is('admin.add_post') || Route::is('adminPosts') ? 'active' : '' }}">
 							<span class="micon bi bi-newspaper"></span><span class="mtext"> Posts </span>
 						</a>
 						<ul class="submenu">
-							<li><a href="ui-buttons.html"> New </a></li>
-							<li><a href="ui-cards.html"> Posts </a></li>
-
+							<li><a href="{{ route('admin.add_post') }}" class="{{ Route::is('admin.add_post') ? 'active' : '' }}"> New </a></li>
+							<li><a href="{{ route('admin.posts') }}" class="{{ Route::is('admin.posts') ? 'active' : '' }}"> Posts </a></li>
 						</ul>
 					</li>
+					@if (auth()->user()->type == 'superAdmin')
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon bi bi-bag"></span><span class="mtext"> Shop </span>
@@ -296,8 +303,7 @@
 
 						</ul>
 					</li>
-
-
+					@endif
 					<li>
 						<a href="invoice.html" class="dropdown-toggle no-arrow">
 							<span class="micon bi bi-receipt-cutoff"></span><span class="mtext">Invoice</span>
@@ -309,18 +315,22 @@
 					<li>
 						<div class="sidebar-small-cap">Settings</div>
 					</li>
+
 					<li>
 						<a href="{{ route('admin.profile') }}" class="dropdown-toggle no-arrow">
 							<span class="micon bi bi-person-circle"></span>
 							<span class="mtext">Profile
 							</span>
 						</a>
+						@if (auth()->user()->type == 'superAdmin')
 						<a href="{{ route('admin.settings') }}" class="dropdown-toggle no-arrow">
 							<span class="micon bi bi-gear"></span>
 							<span class="mtext">General
 							</span>
 						</a>
+						@endif
 					</li>
+
 				</ul>
 			</div>
 		</div>
@@ -338,9 +348,9 @@
 		</div>
 	</div>
 
-	<button class="welcome-modal-btn">
+	{{-- <button class="welcome-modal-btn">
 		<i class="fa fa-download"></i> Download
-	</button>
+	</button> --}}
 	<!-- welcome modal end -->
 	<!-- js -->
 	<script src="/back/vendors/scripts/core.js"></script>

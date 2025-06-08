@@ -128,7 +128,7 @@
 </div> --}}
 @endsection
 @push('scripts')
-<script>
+{{-- <script>
     $('input[type="file"][id="profilePictureFile"]').kropify({
         preview:'image#profilePicturePreview',
         viewMode:1,
@@ -168,5 +168,32 @@
              console.log(text);
           },
         });
-</script>
+</script> --}}
+  <script>
+    const cropper = new Kropify('#profilePictureFile', {
+            aspectRatio: 1,
+            viewMode: 1,
+            preview: 'img#image-preview',
+            processURL: '{{ route("admin.update_profile_picture") }}', // or processURL:'/crop'
+            maxSize: 2 * 1024 * 1024, // 2MB
+            allowedExtensions: ['jpg', 'jpeg', 'png'],
+            showLoader: true,
+            animationClass: 'pulse',
+             // fileName: 'avatar', // leave this commented if you want it to default to the input name
+            cancelButtonText:'Cancel',
+            resetButtonText: 'Reset',
+            cropButtonText: 'Crop & Upload',
+            maxWoH:500,
+            onError: function (msg) {
+                alert(msg);
+                // toastr.error(msg);
+            },
+            onDone: function(response){
+                //alert(response.message);
+                //console.log(response);
+                toastr.success(response.message);
+                
+            }
+        });
+    </script>
 @endpush

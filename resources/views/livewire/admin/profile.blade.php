@@ -3,9 +3,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-30">
             <div class="pd-20 card-box height-100-p">
                 <div class="profile-photo">
-                    <a href="javascript:;"
-                        onclick="event.preventDefault();document.getElementById('profilePictureFile').click();"
-                        class="edit-avatar"><i class="fa fa-pencil"></i></a>
+                    <a href="javascript:;" onclick="event.preventDefault();document.getElementById('profilePictureFile').click();" class="edit-avatar"><i class="fa fa-pencil"></i></a>
                     <img src="{{ $user->picture }}" alt="" class="avatar-photo">
                     <input type="file" name="profilePictureFile" id="profilePictureFile" class="d-none"
                         style="opacity: 0">

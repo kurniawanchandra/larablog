@@ -178,6 +178,39 @@ class Categories extends Component
         }
     }
 
+    public function editCategory($id){
+        $category = Category::findOrFail($id);
+        $this->category_id = $category->id;
+        $this->parent = $category->parent;
+        $this->category_name = $category->name;
+        $this->isUpdateCategoryMode = true;
+        $this->showCategoryModalForm();
+    }
+
+    public function updateCategory(){
+        $category = Category::findOrFail($this->category_id);
+        //dd($category);
+        $this->validate([
+            'category_name'=>'required|unique:categories,name,'.$category->id
+        ],[
+            'category_name.required'=>'Category name field is required',
+            'category_name.unique'=>'Category name is already exists.',
+        ]);
+
+        //update category
+        $category->name = $this->category_name;
+        $category->parent = $this->parent;
+        $category->slug = null;
+        $updated = $category->save();
+        if( $updated ){
+            $this->hideCategoryModalForm();
+            $this->dispatch('showToastr',['type'=> 'success','message'=> 'Category has been updated succesfully']);
+        }else{
+            $this->dispatch('showToastr',[ 'type'=>'error', 'message'=> 'Something went wrong']);
+        }
+        
+    }
+
     public function showCategoryModalForm(){
         $this->resetErrorBag();
         $this->dispatch('showCategoryModalForm');
@@ -195,6 +228,8 @@ class Categories extends Component
     {
         return view('livewire.admin.categories',[
             'pcategories'=>ParentCategory::orderBy('ordering','asc')->get(),
+            'categories'=>Category::orderBy('ordering','asc')->get(),
+
         ]);
     }
 }

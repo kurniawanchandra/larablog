@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    use HasFactory,Sluggable;
+    use HasFactory, Sluggable;
     protected $fillable = [
         'name',
         'slug',
         'parent',
         'ordering',
-    ] ;
+    ];
 
     public function sluggable(): array
     {
@@ -24,4 +24,16 @@ class Category extends Model
             ]
         ];
     }
+
+    /**
+     * parent_category
+     *
+     * @return void
+     */
+    public function parent_category()
+    {
+        return $this->belongsTo(ParentCategory::class, 'parent', 'id')->withDefault();
+    }
+
+
 }
